@@ -1,0 +1,9 @@
+[
+  {
+    "family": "dabka",
+    "name": "dabka_ingester",
+    "image": "756579151825.dkr.ecr.us-east-1.amazonaws.com/dabka_server:latest",
+    "command": ["https://hayden.padium.io/~hjames/dabka_retriever.json"],
+    "essential": true
+  }
+]
