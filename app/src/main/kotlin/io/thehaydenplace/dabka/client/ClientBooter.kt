@@ -33,11 +33,16 @@ class ClientBooter(properties : Properties) : Booter(properties) {
     @Throws(IllegalArgumentException::class)
     private fun createMockClientRunner() : MockClientRunner {
         val topic = properties.getProperty("mqtt.publish.topic") ?: throw IllegalArgumentException("mqtt.publish.topic property not set")
-        val message = properties.getProperty("mqtt.publish.message") ?: throw IllegalArgumentException("mqtt.publish.message property not set")
         val interval = properties.getProperty("mqtt.message.interval") ?: throw IllegalArgumentException("mqtt.message.interval property not set")
         val count = properties.getProperty("mqtt.message.count") ?: throw IllegalArgumentException("mqtt.message.count property not set")
 
-        return MockClientRunner(client, topic, message, Integer.parseInt(count), Integer.parseInt(interval))
+        val message = properties.getProperty("mqtt.publish.message.steps")
+                ?: properties.getProperty("mqtt.publish.message")
+                ?: throw IllegalArgumentException("mqtt.publish.message or mqtt.publish.message.steps property not set")
+
+        val steps = properties.containsKey("mqtt.publish.message.steps")
+
+        return MockClientRunner(client, topic, message, Integer.parseInt(count), Integer.parseInt(interval), steps)
     }
 
     @Throws(IllegalArgumentException::class)
