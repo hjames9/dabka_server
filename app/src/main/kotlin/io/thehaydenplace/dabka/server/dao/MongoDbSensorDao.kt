@@ -230,10 +230,13 @@ class MongoDbSensorDao(private val host: String, port: Int, username: String, pa
         timeQuery.put("\$gte", startTime)
         timeQuery.put("\$lte", endTime)
 
-        val serverTimestampQuery = JsonObject()
-        serverTimestampQuery.put("serverTimestamp", timeQuery)
+        val query = JsonObject()
+        query.put("serverTimestamp", timeQuery)
+        query.put("id", id)
 
-        client.find(COLLECTION_NAME, serverTimestampQuery) {
+        //TODO return near to id
+
+        client.find(COLLECTION_NAME, query) {
             if(it.succeeded()) {
                 println("Successfully executed sensor data query for time range $startTime and $endTime")
                 val sensorDatas = mutableListOf<SensorData>()

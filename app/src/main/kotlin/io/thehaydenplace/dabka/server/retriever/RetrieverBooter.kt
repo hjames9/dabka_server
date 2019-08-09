@@ -64,8 +64,9 @@ class RetrieverBooter(properties: Properties) : Booter(properties) {
     @Throws(IllegalArgumentException::class)
     private fun createHttpSensorRetriever() : HttpSensorRetriever {
         val port = properties.getProperty("http.server.port", "8080") ?: throw IllegalArgumentException("http.server.port property not set")
-        val path = properties.getProperty("http.server.websocket.path", "/sensorUpdates") ?: throw IllegalArgumentException("http.server.websocket.path property not set")
+        val updatePath = properties.getProperty("http.server.websocket.path", "/sensorUpdates") ?: throw IllegalArgumentException("http.server.websocket.path property not set")
+        val path = properties.getProperty("http.server.path", "/sensor") ?: throw IllegalArgumentException("http.server.path property not set")
 
-        return HttpSensorRetriever(sensorDao, path, Integer.parseInt(port))
+        return HttpSensorRetriever(sensorDao, path, updatePath, Integer.parseInt(port))
     }
 }
