@@ -39,7 +39,7 @@ class HttpSensorRetriever(private val sensorDao : SensorDao, private val path: S
         configureRestApiHandler()
 
         httpServer.listen(port) {
-            println("$TAG started listening on $port")
+            println("$TAG started listening on port($port) with websockets($updatePath), REST($path)")
         }
     }
 

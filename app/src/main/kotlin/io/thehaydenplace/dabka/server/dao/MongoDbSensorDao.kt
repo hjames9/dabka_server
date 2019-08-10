@@ -8,6 +8,7 @@ import io.vertx.core.Vertx
 import io.vertx.core.json.JsonArray
 import io.vertx.core.json.JsonObject
 import io.vertx.ext.mongo.BulkOperation
+import io.vertx.ext.mongo.FindOptions
 import io.vertx.ext.mongo.MongoClient
 import com.mongodb.client.model.Aggregates
 import com.mongodb.client.model.changestream.ChangeStreamDocument
@@ -236,7 +237,8 @@ class MongoDbSensorDao(private val host: String, port: Int, username: String, pa
 
         //TODO return near to id
 
-        client.find(COLLECTION_NAME, query) {
+        val findOptions = FindOptions().setSort(JsonObject("{\"serverTimestamp\": 1}"))
+        client.findWithOptions(COLLECTION_NAME, query, findOptions) {
             if(it.succeeded()) {
                 println("Successfully executed sensor data query for time range $startTime and $endTime")
                 val sensorDatas = mutableListOf<SensorData>()

@@ -20,6 +20,9 @@ class ClientBooter(properties : Properties) : Booter(properties) {
     override fun run() {
         client = createMockClient()
         clientRunner = createMockClientRunner()
+
+        //We are done after this runs
+        System.exit(0);
     }
 
     override fun close() {
