@@ -10,7 +10,7 @@ buildscript {
 }
 
 group 'io.thehaydenplace.dabka'
-version '0.0.1-SNAPSHOT'
+version '0.0.2-SNAPSHOT'
 
 apply plugin: 'java'
 apply plugin: 'kotlin'
@@ -44,7 +44,7 @@ compileTestKotlin {
 }
 
 //Version
-version = '0.0.1'
+version = '0.0.2'
 
 jar {
     from(configurations.compile.collect { it.isDirectory() ? it : zipTree(it) }) {
