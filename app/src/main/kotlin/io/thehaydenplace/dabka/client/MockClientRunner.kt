@@ -2,7 +2,7 @@ package io.thehaydenplace.dabka.client
 
 import io.vertx.core.json.JsonObject
 import java.util.*
-
+import kotlin.math.cos
 
 class MockClientRunner(private val client: Client, private val topic: String,
                        private val message: String, private val count: Int,
@@ -71,7 +71,7 @@ class MockClientRunner(private val client: Client, private val topic: String,
         }
 
         val dLat = dn / EARTH_RADIUS
-        val dLon = de / (EARTH_RADIUS * Math.cos(Math.PI * (latitude / 180)))
+        val dLon = de / (EARTH_RADIUS * cos(Math.PI * (latitude / 180)))
 
         return Pair(latitude + dLat * 180 / Math.PI, longitude + dLon * 180 / Math.PI)
     }

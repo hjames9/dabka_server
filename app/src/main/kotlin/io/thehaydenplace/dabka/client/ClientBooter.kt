@@ -4,6 +4,7 @@ import io.thehaydenplace.dabka.util.bootstrap.Booter
 import java.nio.file.Files
 import java.nio.file.Paths
 import java.util.*
+import kotlin.system.exitProcess
 
 class ClientBooter(properties : Properties) : Booter(properties) {
     companion object {
@@ -22,7 +23,7 @@ class ClientBooter(properties : Properties) : Booter(properties) {
         clientRunner = createMockClientRunner()
 
         //We are done after this runs
-        System.exit(0);
+        exitProcess(0)
     }
 
     override fun close() {
@@ -52,11 +53,17 @@ class ClientBooter(properties : Properties) : Booter(properties) {
     private fun createMockClient() : MockClient {
         val host = properties.getProperty("mqtt.server.host") ?: throw IllegalArgumentException("mqtt.server.host not set")
         val port = Integer.parseInt(properties.getProperty("mqtt.server.port", "8883"))
-        val tlsKeyPath = properties.getProperty("mqtt.server.tls.client.key") ?: throw IllegalArgumentException("mqtt.server.tls.client.key property not set")
-        val tlsCertPath = properties.getProperty("mqtt.server.tls.client.cert") ?: throw IllegalArgumentException("mqtt.server.tls.client.cert property not set")
+        val tlsKeyPath = properties.getProperty("mqtt.server.tls.client.key")
+        val tlsCertPath = properties.getProperty("mqtt.server.tls.client.cert")
+        var tlsKey = ""
+        var tlsCert = ""
 
-        val tlsKey = String(Files.readAllBytes(Paths.get(tlsKeyPath)))
-        val tlsCert = String(Files.readAllBytes(Paths.get(tlsCertPath)))
+        if(tlsKeyPath != null) {
+            tlsKey = String(Files.readAllBytes(Paths.get(tlsKeyPath)))
+        }
+        if(tlsCertPath != null) {
+            tlsCert = String(Files.readAllBytes(Paths.get(tlsCertPath)))
+        }
 
         return MockClient(host, port, tlsKey, tlsCert)
     }

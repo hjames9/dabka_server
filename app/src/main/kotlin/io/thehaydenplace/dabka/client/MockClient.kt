@@ -14,13 +14,19 @@ class MockClient (private val host: String, private val port: Int,
     }
 
     private val vertx = Vertx.vertx()
-    private val client = MqttClient.create(vertx, MqttClientOptions().setSsl(true)
-            .setKeyCertOptions(PemKeyCertOptions()
-                    .setKeyValue(Buffer.buffer(tlsKey))
-                    .setCertValue(Buffer.buffer(tlsCert))))
+    private val client : MqttClient
 
     init {
         println("Created $TAG")
+
+        val isSsl = tlsKey.isNotEmpty() && tlsCert.isNotEmpty()
+        val options = MqttClientOptions().setSsl(isSsl)
+        if(isSsl) {
+            options.keyCertOptions = PemKeyCertOptions()
+                    .setKeyValue(Buffer.buffer(tlsKey))
+                    .setCertValue(Buffer.buffer(tlsCert))
+        }
+        client = MqttClient.create(vertx, options)
         doConnect()
     }
 
@@ -47,10 +53,10 @@ class MockClient (private val host: String, private val port: Int,
     }
 
     override fun close() {
-        client.disconnect( {
+        client.disconnect {
             if(it.succeeded()) {
                 println("MQTT client disconnected")
             }
-        })
+        }
     }
 }
